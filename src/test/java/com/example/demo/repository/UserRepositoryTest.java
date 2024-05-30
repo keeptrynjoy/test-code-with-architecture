@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-@Sql("/sql/user-repository-test-data.sql")
+@Sql("/sql/user-repository-test-data.sql") // test/resources/ 내부의 sql을 읽어서 테스트전 setUp
 public class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;
