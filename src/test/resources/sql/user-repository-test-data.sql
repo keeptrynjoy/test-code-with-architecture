@@ -1,1 +1,1 @@
-insert into `users` (`id`, `email`, `nickname`, `address`, `certification_code`, `status`, `last_login_at`) values (1, 'sungmin4218@gmail.com', 'code200jade', 'Seoul', 'aaaaaaa-aaaaaa-aaaaa-aaaaaaaaa', 'ACTIVE',0)
+-- insert into `users` (`id`, `email`, `nickname`, `address`, `certification_code`, `status`, `last_login_at`) values (1, 'sungmin4218@gmail.com', 'code200jade', 'Seoul', 'aaaaaaa-aaaaaa-aaaaa-aaaaaaaaa', 'ACTIVE',0)
