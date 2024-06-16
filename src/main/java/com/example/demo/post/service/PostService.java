@@ -4,7 +4,7 @@ import com.example.demo.common.exception.ResourceNotFoundException;
 import com.example.demo.post.domain.dto.PostCreate;
 import com.example.demo.post.domain.dto.PostUpdate;
 import com.example.demo.post.infrastructure.PostEntity;
-import com.example.demo.post.infrastructure.PostRepository;
+import com.example.demo.post.service.port.PostRepository;
 import com.example.demo.user.infrastructure.UserEntity;
 import java.time.Clock;
 
