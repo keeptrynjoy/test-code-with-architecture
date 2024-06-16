@@ -1,11 +1,10 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.UserStatus;
-import com.example.demo.model.dto.UserUpdateDto;
-import com.example.demo.repository.UserEntity;
-import com.example.demo.repository.UserRepository;
+import com.example.demo.user.domain.UserStatus;
+import com.example.demo.user.domain.dto.UserUpdate;
+import com.example.demo.user.infrastructure.UserEntity;
+import com.example.demo.user.infrastructure.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -15,11 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -59,8 +55,6 @@ class UserControllerTest {
                 .andExpect(content().string("Users에서 ID 134214214를 찾을 수 없습니다."));
     }
 
-
-
     @Test
     void 사용자는_인증_코드로_계정을_활성화_시킬_수_있다() throws Exception {
         mockMvc.perform(get("/api/users/2/verify")
@@ -69,6 +63,15 @@ class UserControllerTest {
 
         UserEntity userEntity = userRepository.findById(2L).get();
         assertThat(userEntity.getStatus()).isEqualTo(UserStatus.ACTIVE);
+    }
+
+    @Test
+    void 사용자는_인증_코드가_일치하지_않을_경우_권한_없음_에러를_내려준다() throws Exception {
+        mockMvc.perform(
+                get("/api/users/2/verify")
+                        .queryParam("certificationCode", "aaaaaaa-aaaaaa-aaaaa-aaaaaaaac")
+                )
+                .andExpect(status().isForbidden());
     }
 
     @Test
@@ -86,13 +89,13 @@ class UserControllerTest {
 
     @Test
     void 사용자는_내_정보를_수정할_수_있다() throws Exception {
-        UserUpdateDto userUpdateDto = UserUpdateDto.builder().nickname("code500jade").address("New York").build();
+        UserUpdate userUpdate = UserUpdate.builder().nickname("code500jade").address("New York").build();
 
         mockMvc.perform(
                 put("/api/users/me")
                         .header("EMAIL", "sungmin4218@gmail.com")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(userUpdateDto))
+                        .content(objectMapper.writeValueAsString(userUpdate))
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1))
