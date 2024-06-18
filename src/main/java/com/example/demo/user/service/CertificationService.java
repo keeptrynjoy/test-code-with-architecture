@@ -10,10 +10,10 @@ public class CertificationService {
 
     private final MailSender mailSender;
 
-    public void sendCertificationEmail(String email, long userId, String certificationCode) {
+    public void send(String email, long userId, String certificationCode) {
         final String certificationUrl = generateCertificationUrl(userId, certificationCode);
         final String title = "Please certify your email address";
-        final String content ="Please click the following link to certify your email address: " + certificationUrl;
+        final String content = "Please click the following link to certify your email address: " + certificationUrl;
         mailSender.send(email, title, content);
     }
 

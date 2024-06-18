@@ -6,14 +6,12 @@ import com.example.demo.user.domain.UserStatus;
 import com.example.demo.user.domain.dto.UserCreate;
 import com.example.demo.user.domain.dto.UserUpdate;
 import com.example.demo.user.infrastructure.UserEntity;
-import com.example.demo.user.infrastructure.UserJpaRepository;
+
 import java.time.Clock;
 import java.util.UUID;
 
 import com.example.demo.user.service.port.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,7 +41,7 @@ public class UserService {
         userEntity.setStatus(UserStatus.PENDING);
         userEntity.setCertificationCode(UUID.randomUUID().toString());
         userEntity = userRepository.save(userEntity);
-        certificationService.sendCertificationEmail(userCreate.getEmail(), userEntity.getId(), userEntity.getCertificationCode());
+        certificationService.send(userCreate.getEmail(), userEntity.getId(), userEntity.getCertificationCode());
         return userEntity;
     }
 
