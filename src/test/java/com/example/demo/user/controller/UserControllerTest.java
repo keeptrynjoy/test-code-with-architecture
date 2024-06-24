@@ -89,7 +89,10 @@ class UserControllerTest {
 
     @Test
     void 사용자는_내_정보를_수정할_수_있다() throws Exception {
-        UserUpdate userUpdate = UserUpdate.builder().nickname("code500jade").address("New York").build();
+        UserUpdate userUpdate = UserUpdate.builder()
+                .nickname("code500jade")
+                .address("New York")
+                .build();
 
         mockMvc.perform(
                 put("/api/users/me")

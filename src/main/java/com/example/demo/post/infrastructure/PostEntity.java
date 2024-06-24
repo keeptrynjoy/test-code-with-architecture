@@ -1,5 +1,7 @@
 package com.example.demo.post.infrastructure;
 
+import com.example.demo.post.domain.Post;
+import com.example.demo.user.domain.Users;
 import com.example.demo.user.infrastructure.UserEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -35,4 +37,22 @@ public class PostEntity {
     @JoinColumn(name = "user_id")
     private UserEntity writer;
 
+    public static PostEntity fromModel(Post post) {
+        PostEntity postEntity = new PostEntity();
+        postEntity.content = post.getContent();
+        postEntity.createdAt = post.getCreatedAt();
+        postEntity.modifiedAt = post.getModifiedAt();
+        postEntity.writer = UserEntity.fromModel(post.getWriter());
+        return postEntity;
+    }
+
+    public Post toModel() {
+        return Post.builder()
+                .id(id)
+                .content(content)
+                .writer(writer.toModel())
+                .createdAt(createdAt)
+                .modifiedAt(modifiedAt)
+                .build();
+    }
 }
