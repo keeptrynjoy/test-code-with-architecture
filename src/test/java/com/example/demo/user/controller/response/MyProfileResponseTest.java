@@ -4,10 +4,10 @@ import com.example.demo.user.domain.UserStatus;
 import com.example.demo.user.domain.Users;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-class UserResponseTest {
+class MyProfileResponseTest {
 
     @Test
     void Users으로_응답을_생성할_수_있다(){
@@ -23,15 +23,16 @@ class UserResponseTest {
                 .build();
 
         //when
-        UserResponse userResponse = UserResponse.from(users);
+        MyProfileResponse myProfileResponse = MyProfileResponse.from(users);
 
         //then
         assertAll(()->{
-            assertThat(userResponse.getId()).isEqualTo(1);
-            assertThat(userResponse.getEmail()).isEqualTo("sungmin4218@gmail.com");
-            assertThat(userResponse.getNickname()).isEqualTo("code200jade");
-            assertThat(userResponse.getStatus()).isEqualTo(UserStatus.ACTIVE);
-            assertThat(userResponse.getLastLoginAt()).isEqualTo(100L);
+            assertThat(myProfileResponse.getId()).isEqualTo(1);
+            assertThat(myProfileResponse.getEmail()).isEqualTo("sungmin4218@gmail.com");
+            assertThat(myProfileResponse.getNickname()).isEqualTo("code200jade");
+            assertThat(myProfileResponse.getAddress()).isEqualTo("Seoul");
+            assertThat(myProfileResponse.getStatus()).isEqualTo(UserStatus.ACTIVE);
+            assertThat(myProfileResponse.getLastLoginAt()).isEqualTo(100L);
         });
     }
 
