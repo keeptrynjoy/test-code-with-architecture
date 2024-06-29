@@ -1,6 +1,8 @@
-package com.example.demo.user.infrastructure;
+package com.example.demo.medium;
 
 import com.example.demo.user.domain.UserStatus;
+import com.example.demo.user.infrastructure.UserEntity;
+import com.example.demo.user.infrastructure.UserJpaRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -12,7 +14,7 @@ import static org.assertj.core.api.Assertions.*;
 
 @DataJpaTest
 @Sql("/sql/user-repository-test-data.sql") // test/resources/ 내부의 sql을 읽어서 테스트전 setUp
-public class UserRepositoryTest {
+public class UserJpaRepositoryTest {
     @Autowired
     private UserJpaRepository userJpaRepository;
 
