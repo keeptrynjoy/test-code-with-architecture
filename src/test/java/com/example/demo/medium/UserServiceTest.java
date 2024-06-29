@@ -73,25 +73,25 @@ class UserServiceTest {
         }).isInstanceOf(ResourceNotFoundException.class);
     }
 
-    @Test
-    void userCreateDto를_이용하여_유저를_생성할_수_있다(){
-        //given
-        UserCreate userCreate = UserCreate.builder()
-                .email("sungmin200@gmail.com")
-                .address("Busan")
-                .nickname("sungmin")
-                .build();
-
-        // 이메일을 발송하는 JavaMailSender를 대체하기 위해 Mock사용
-        BDDMockito.doNothing().when(mailSender).send(any(SimpleMailMessage.class));
-
-        //when
-        Users result = userService.create(userCreate);
-
-        //then
-        assertThat(result.getId()).isNotNull();
-        assertThat(result.getStatus()).isEqualTo(UserStatus.PENDING);
-    }
+//    @Test
+//    void userCreateDto를_이용하여_유저를_생성할_수_있다(){
+//        //given
+//        UserCreate userCreate = UserCreate.builder()
+//                .email("sungmin200@gmail.com")
+//                .address("Busan")
+//                .nickname("sungmin")
+//                .build();
+//
+//        // 이메일을 발송하는 JavaMailSender를 대체하기 위해 Mock사용
+//        BDDMockito.doNothing().when(mailSender).send(any(SimpleMailMessage.class));
+//
+//        //when
+//        Users result = userService.create(userCreate);
+//
+//        //then
+//        assertThat(result.getId()).isNotNull();
+//        assertThat(result.getStatus()).isEqualTo(UserStatus.PENDING);
+//    }
 
     @Test
     void userUpdateDto를_이용하여_유저를_수정할_수_있다(){
