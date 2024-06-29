@@ -17,15 +17,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 
-class UserServiceTest {
-    private UserService userService;
+class UserServiceImplTest {
+    private UserServiceImpl userServiceImpl;
 
     @BeforeEach
     void init(){
         FakeMailSender fakeMailSender = new FakeMailSender();
         FakeUserRepository fakeUserRepository = new FakeUserRepository();
 
-        this.userService = UserService.builder()
+        this.userServiceImpl = UserServiceImpl.builder()
                 .uuidHolder(new TestUuidHolder("aaaaaaa-aaaaaa-aaaaa-aaaaaaaaa"))
                 .clockHolder(new TestClockHolder(1678530673958L))
                 .userRepository(fakeUserRepository)
@@ -61,7 +61,7 @@ class UserServiceTest {
         String email = "sungmin4218@gmail.com";
 
         //when
-        Users users = userService.getByEmail(email);
+        Users users = userServiceImpl.getByEmail(email);
 
         //then
         assertThat(users.getNickname()).isEqualTo("code200jade");
@@ -74,14 +74,14 @@ class UserServiceTest {
 
         //when & then
         assertThatThrownBy(() -> {
-            userService.getByEmail(email);
+            userServiceImpl.getByEmail(email);
         }).isInstanceOf(ResourceNotFoundException.class);
     }
 
     @Test
     void getById는_ACTIVE_상태인_유저를_찾아올_수_있다(){
         //given & when
-        Users byEmail = userService.getById(1);
+        Users byEmail = userServiceImpl.getById(1);
 
         //then
         assertThat(byEmail.getNickname()).isEqualTo("code200jade");
@@ -91,7 +91,7 @@ class UserServiceTest {
     void getById는_PENDING_상태인_유저를_찾아올_수_없다(){
         //given & when & then
         assertThatThrownBy(() -> {
-            userService.getById(2);
+            userServiceImpl.getById(2);
         }).isInstanceOf(ResourceNotFoundException.class);
     }
 
@@ -106,7 +106,7 @@ class UserServiceTest {
 
 
         //when
-        Users result = userService.create(userCreate);
+        Users result = userServiceImpl.create(userCreate);
 
         //then
         assertThat(result.getId()).isNotNull();
@@ -123,10 +123,10 @@ class UserServiceTest {
                 .build();
 
         //when
-        userService.update(1,userUpdate);
+        userServiceImpl.update(1,userUpdate);
 
         //then
-        Users userEntity = userService.getById(1);
+        Users userEntity = userServiceImpl.getById(1);
 
         assertThat(userEntity.getId()).isNotNull();
         assertThat(userEntity.getAddress()).isEqualTo("Masan");
@@ -136,10 +136,10 @@ class UserServiceTest {
     @Test
     void user를_로그인_시키면_마지막_로그인_시간에_변경된다(){
         //given & when
-        userService.login(1);
+        userServiceImpl.login(1);
 
         //then
-        Users userEntity = userService.getById(1);
+        Users userEntity = userServiceImpl.getById(1);
         assertThat(userEntity.getLastLoginAt()).isGreaterThan(0L);
         assertThat(userEntity.getLastLoginAt()).isEqualTo(1678530673958L);
     }
@@ -147,17 +147,17 @@ class UserServiceTest {
     @Test
     void PENDING_상태의_사용자는_인증_코드로_ACTIVE_시킬_수_있다(){
         //given & when
-        userService.verifyEmail(2,"aaaaaaa-aaaaaa-aaaaa-aaaaaaaab");
+        userServiceImpl.verifyEmail(2,"aaaaaaa-aaaaaa-aaaaa-aaaaaaaab");
 
         //then
-        Users userEntity = userService.getById(2L);
+        Users userEntity = userServiceImpl.getById(2L);
         assertThat(userEntity.getStatus()).isEqualTo(UserStatus.ACTIVE);
     }
 
     @Test
     void PENDING_상태의_사용자는_잘못된_인증_코드를_받으면_에러를_던진다(){
         assertThatThrownBy(()->{
-            userService.verifyEmail(2,"aaaaaaa-aaaaaa-aaaaa-aaaaaaaaa");
+            userServiceImpl.verifyEmail(2,"aaaaaaa-aaaaaa-aaaaa-aaaaaaaaa");
                 }).isInstanceOf(CertificationCodeNotMatchedException.class);
     }
 }
